@@ -26,10 +26,8 @@ library(tigris)
 5. get_advan
 
 ### data
-(mobility data obtained from [Advan](https://app.deweydata.io/products/2dfcb598-6e30-49f1-bdba-1deae113a951/package/))
-
- 
-
+- mobility data obtained from [Advan](https://app.deweydata.io/products/2dfcb598-6e30-49f1-bdba-1deae113a951/package/)
+- census data through API call
 
 
 ## USAGE
