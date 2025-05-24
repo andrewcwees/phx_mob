@@ -20,11 +20,10 @@ library(tidycensus)
 library(tigris)
 
 ### scripts
-1. compile
-2. map_poi
-3. eval_iso
-4. census_viz
-5. get_advan
+1. get_acs
+2. census_viz
+3. get_npat
+4. refine_npat
 
 ### data
 - mobility data obtained from [Advan](https://app.deweydata.io/products/2dfcb598-6e30-49f1-bdba-1deae113a951/package/)
@@ -33,7 +32,7 @@ library(tigris)
 ## USAGE
 - Install/load all required packages
 - Run scripts in order listed above
-- Not all data used in this project is publicly available (Dewey data subscription is required to access Advan mobility datasets)
+- Not all data used in this project is publicly available (Dewey data subscription is required to access Advan 'Neighborhood Patterns' dataset)
 
 
 
