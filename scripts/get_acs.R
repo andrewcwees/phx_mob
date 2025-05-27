@@ -1,4 +1,4 @@
-### libs #######################################################################
+# libs ####
 library(sf)
 library(httr)
 library(dplyr)
@@ -50,7 +50,7 @@ acs <- get_acs(
   variables = vars,
   state = "AZ",
   county = "Maricopa",
-  year = 2020,
+  year = 2023,
   survey = "acs5",
   geometry = T,
   output = "wide")  %>% dplyr::select(GEOID, geometry, matches("E$")) %>%
@@ -63,7 +63,7 @@ acs <- get_acs(
 county_bound <- summarise(acs)
 
 # set density threshold -> filter
-density_filter <- 0.0001 
+density_filter <- 0.001 
 
 dense_blocks <- acs %>% dplyr::filter(pop_density >= density_filter)
 

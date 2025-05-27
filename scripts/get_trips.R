@@ -130,13 +130,16 @@ cat_filt <- c(
   'Taxi and Limousine Service',
   'Specialty Food Stores',
   'Psychiatric and Substance Abuse Hospitals',
-  'Interurban and Rural Bus Transportation')
+  'Interurban and Rural Bus Transportation',
+  'Other Amusement and Recreation Industries')
 
-ftrips <- trips %>% dplyr::filter(!TOP_CATEGORY %in% cat_filt)
+ftrips <- trips %>% dplyr::filter(!TOP_CATEGORY %in% cat_filt) %>% 
+  dplyr::select(-SUB_CAT, -CATEGOR, -REGION, -STREET_) %>%
+  rename(
+    NAME = LOCATIO,
+    NAICS = NAICS_C)
 
 st_write(ftrips, 'D:/research/phxmob/data/trips/trips.shp')
-
-
 
 
 
