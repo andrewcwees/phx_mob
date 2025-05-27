@@ -1,5 +1,5 @@
 # phx_mob
-In R, combine US census & smartphone GPS data to evaluate how access and usage of local amenities in Maricopa County, Arizona varies across income and racial/ethnic demographics.
+In R, combine US census & smartphone GPS data to evaluate how both access and utilization of local amenities varies across income and racial/ethnic demographics in urban areas across Maricopa County, Arizona.
 
 ## SETUP
 
