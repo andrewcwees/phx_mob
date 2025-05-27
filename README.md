@@ -21,9 +21,10 @@ library(tigris)
 
 ### scripts
 1. get_acs
-2. census_viz
-3. get_npat
-4. refine_npat
+2. acs_viz
+3. get_trips
+4. get_iso
+5. iso_viz
 
 ### data
 - mobility data obtained from [Advan](https://app.deweydata.io/products/2dfcb598-6e30-49f1-bdba-1deae113a951/package/)
