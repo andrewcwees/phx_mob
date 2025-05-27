@@ -27,8 +27,8 @@ library(tigris)
 5. iso_viz
 
 ### data
-- mobility data obtained from [Advan](https://app.deweydata.io/products/2dfcb598-6e30-49f1-bdba-1deae113a951/package/)
-- census data through API call
+- POI visit data obtained from [Advan](https://app.deweydata.io/products/2dfcb598-6e30-49f1-bdba-1deae113a951/package/)
+- ACS data through API call
 
 ## USAGE
 - Install/load all required packages
