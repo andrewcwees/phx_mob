@@ -31,7 +31,7 @@ library(tigris)
 - demographic data from recent 5-year American Community Survey estimates
 
 ## ANALYSIS/RESULTS
-- maps, plots, graphs, tables etc. stored under andrewcwees/phx_mob/output
+- maps, plots, graphs, tables etc. stored [here](https://github.com/andrewcwees/phx_mob/output) 
 - learn more about the concept, methodology, and results of this project [here](https://github.com/andrewcwees/phx_mob/paper_draft.pdf) 
 
 
