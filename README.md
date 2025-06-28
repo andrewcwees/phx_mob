@@ -1,9 +1,9 @@
 # phx_mob
-In R, combine US census & smartphone GPS data to evaluate how both access and utilization of local amenities varies across income and racial/ethnic demographics in urban areas across Maricopa County, Arizona.
+With R, compile and analyze US census & phone GPS-based mobility data to evaluate how proximity relates to utilization for a set of crucial public amenities across sociodemographics in the Phoenix metropolitan area.
 
-## SETUP
+## SETUP/RUN
 
-### required packages
+### install/load packages
 library(sf)
 library(httr)
 library(skimr)
@@ -19,21 +19,20 @@ library(ggspatial)
 library(tidycensus)
 library(tigris)
 
-### scripts
-1. get_acs
-2. acs_viz
-3. get_trips
-4. get_iso
-5. iso_viz
+### run scripts in order (after adjusting paths)
+1. get_data
+2. filters
+3. r5r_calc
+4. maps
+5. viz
 
 ### data
-- POI visit data obtained from [Advan](https://app.deweydata.io/products/2dfcb598-6e30-49f1-bdba-1deae113a951/package/)
-- ACS data through API call
+- mobility data obtained from [Advan](https://app.deweydata.io/products/2dfcb598-6e30-49f1-bdba-1deae113a951/package/) (Monthly Patterns set)
+- demographic data from recent 5-year American Community Survey estimates
 
-## USAGE
-- Install/load all required packages
-- Run scripts in order listed above
-- Not all data used in this project is publicly available (Dewey data subscription is required to access Advan 'Neighborhood Patterns' dataset)
+## ANALYSIS/RESULTS
+- maps, plots, graphs, tables etc. stored under andrewcwees/phx_mob/output
+- learn more about the concept, methodology, and results of this project [here](https://github.com/andrewcwees/phx_mob/paper_draft.pdf) 
 
 
 
