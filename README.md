@@ -1,5 +1,5 @@
 # phx_mob
-With R, compile and analyze US census & phone GPS-based mobility data to evaluate how proximity relates to utilization for a set of crucial public amenities across sociodemographics in the Phoenix metropolitan area.
+Explore US census & phone GPS-based mobility data to evaluate how proximity relates to utilization for a set of crucial public amenities across sociodemographics in the Phoenix metropolitan area.
 
 ## SETUP/RUN
 
