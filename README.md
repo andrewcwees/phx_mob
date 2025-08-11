@@ -1,9 +1,9 @@
-# phx_mob
+# project: phx_mob
 Identify opportunities for maximizing improvements in amenity accessibility in Phoenix, AZ through multi-modal, time-denominated route modeling with r5r package and OSM street mapping
 
-## SETUP/RUN
+## SETUP
 
-### install/load packages
+### required packages
 install.packages("data.table")
 install.packages("deweydatar")
 install.packages("dplyr")
@@ -28,7 +28,7 @@ install.packages("tidyr")
 install.packages("tidyverse")
 install.packages("tigris")
 
-### run scripts in order (after adjusting paths)
+### scripts
 1. compile
    a. get_OD_data
    b. calc_access
@@ -37,11 +37,13 @@ install.packages("tigris")
    b. plots
    c. tables
 
-### data
+### data sources
 - destination locations obtained from [Advan Monthly Patterns](https://app.deweydata.io/products/2dfcb598-6e30-49f1-bdba-1deae113a951/package/)
 - demographic data from 5yr (2019-2023) American Community Survey estimates
 
+## USAGE
 
+Start by installing and loading all required packages. Modify directory paths and run scripts in the order listed.
 
 
 
