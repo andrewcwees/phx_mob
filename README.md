@@ -1,5 +1,5 @@
 # phx_mob
-Explore US census & phone GPS-based mobility data to evaluate how proximity relates to utilization for a set of crucial public amenities across sociodemographics in the Phoenix metropolitan area.
+Identify opportunities for maximizing improvements in amenity accessibility in Phoenix, AZ through multi-modal, time-denominated route modeling with r5r package and OSM street mapping
 
 ## SETUP/RUN
 
@@ -29,23 +29,17 @@ install.packages("tidyverse")
 install.packages("tigris")
 
 ### run scripts in order (after adjusting paths)
-1. get_data
-2. filters
-3. r5r_calc
-4. maps
-5. viz
+1. compile
+   a. get_OD_data
+   b. calc_access
+2. analysis
+   a. maps
+   b. plots
+   c. tables
 
 ### data
-- mobility data obtained from [Advan](https://app.deweydata.io/products/2dfcb598-6e30-49f1-bdba-1deae113a951/package/) (Monthly Patterns set)
-- demographic data from recent 5-year American Community Survey estimates
-
-## ANALYSIS/RESULTS
-- maps, plots, graphs, tables etc. stored [here](https://github.com/andrewcwees/phx_mob/output) 
-- learn more about the concept, methodology, and results of this project [here](https://github.com/andrewcwees/phx_mob/paper_draft.pdf) 
-
-
-
-
+- destination locations obtained from [Advan Monthly Patterns](https://app.deweydata.io/products/2dfcb598-6e30-49f1-bdba-1deae113a951/package/)
+- demographic data from 5yr (2019-2023) American Community Survey estimates
 
 
 
