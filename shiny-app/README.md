@@ -6,7 +6,7 @@ pharmacy, park, school, library, transit stop) across ~835 Maricopa County
 census block groups, and lets the viewer probe **sociodemographic disparities**
 in that access.
 
-**Live app:** _(add the Posit Connect Cloud URL after publishing — see below)_
+**Live app:** https://connect.posit.cloud/andrewcwees/content/019f4dab-5684-7130-b404-1e7165bdbd19
 **Code:** this folder; underlying analysis lives in the repository root.
 
 ## What it does
