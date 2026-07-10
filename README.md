@@ -1,6 +1,9 @@
 # project: phx_mob
 Identify opportunities for maximizing improvements in amenity accessibility in Phoenix, AZ through multi-modal, time-denominated route modeling with r5r package and OSM street mapping
 
+## Interactive app
+An interactive R Shiny dashboard of these results lives in [`shiny-app/`](shiny-app/) — an interactive `leaflet` + `ggplot2` view of multi-modal amenity access and its sociodemographic disparities across Maricopa County. See [`shiny-app/README.md`](shiny-app/README.md) to run it locally or view the live deployment.
+
 ## SETUP
 
 ### required packages
