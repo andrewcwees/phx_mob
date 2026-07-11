@@ -1,34 +1,45 @@
-# Phoenix Multi-Modal Amenity Access — interactive Shiny app
+# Phoenix Multi-Modal Amenity Access — Shiny work sample
 
-An interactive R Shiny dashboard built from this **phx_mob** project. It maps
+An interactive R Shiny dashboard built from the **phxmob** research project
+(Weesner & Lim, UA Zuckerman College of Public Health). It maps
 **time-denominated, multi-modal access** to six essential amenities (grocery,
 pharmacy, park, school, library, transit stop) across ~835 Maricopa County
 census block groups, and lets the viewer probe **sociodemographic disparities**
 in that access.
 
-**Live app:** https://019f4dab-5684-7130-b404-1e7165bdbd19.share.connect.posit.cloud/
-**Code:** this folder; underlying analysis lives in the repository root.
+Purpose: a job-search work sample demonstrating R + Shiny + `leaflet` +
+spatial data + reproducible dashboarding.
+
+**Live app:** _(add your shinyapps.io URL after deploying — see below)_
+**Code:** this repository.
 
 ## What it does
-- **Interactive choropleth** (`leaflet`): travel time from each block group to
-  the nearest amenity of the selected type, by **walking** or **biking**
-  network routing. Hover for per-block-group detail; grey = not reachable
-  within 60 min.
+Two map modes, chosen from the **Amenity / measure** selector:
+
+- **Single amenity** — an interactive choropleth (`leaflet`) of travel time
+  from each block group to the **nearest** amenity of the selected type, by
+  **walking** or **biking** network routing. Hover for per-block-group detail;
+  grey = not reachable within 60 min. A **toggleable point layer** overlays
+  every destination of the selected type (marker-clustered).
+- **Cumulative opportunity** — within a chosen **travel-time budget**
+  (15–60 min), how much each block group can reach: **amenity types
+  reachable** (of 6) or **total destinations reachable** across types.
 - **Equity chart** (`ggplot2`): the distribution of a chosen sociodemographic
   variable (median income, % White, % Hispanic, % renter, population density)
-  across travel-time bins — the disparity story.
-- **Value boxes**: share of block groups reachable within 15 min, median time
-  to nearest, and n mapped.
+  across access bins — the disparity story. Bins are travel-time (single
+  amenity) or opportunity level (cumulative).
+- **Value boxes** adapt to the measure — e.g. share reachable within 15 min /
+  median types reachable / median destinations reachable, plus n mapped.
 
 ## Files
 - `app.R` — the Shiny app. Self-contained; reads only `phxmob_data.rds`.
-- `phxmob_data.rds` — baked bundle (block-group polygons + access measures +
-  ACS sociodemographics). ~0.1 MB; **no Census API key or external data needed
-  at runtime.**
-- `manifest.json` — dependency + R-version lockfile for Posit Connect Cloud
-  (generated with `rsconnect::writeManifest()`).
+- `phxmob_data.rds` — baked bundle (block-group polygons + ACS
+  sociodemographics + single-amenity time-to-nearest + cumulative-opportunity
+  measures + amenity point locations). ~0.26 MB; **no Census API key or `D:\`
+  data needed at runtime.**
 - `prep_data.R` — one-time build script that regenerates the bundle from the
-  canonical access frame + `tigris` boundaries. Only needed to refresh the data.
+  canonical frame (`D:/research/phxmob/data/access.gpkg`) + `tigris`
+  boundaries. Only needed to refresh the data.
 
 ## Run locally
 ```r
@@ -37,18 +48,11 @@ shiny::runApp()
 ```
 Requires: `shiny`, `bslib`, `leaflet`, `dplyr`, `sf`, `ggplot2`, `scales`.
 
-## Deploy a live link (Posit Connect Cloud)
-This app deploys to [Posit Connect Cloud](https://connect.posit.cloud) directly
-from GitHub — no local publish step:
-1. Sign in to Connect Cloud with your GitHub account.
-2. **Publish → Shiny**, select this repository (`andrewcwees/phx_mob`), and set
-   the primary file to **`shiny-app/app.R`**.
-3. Connect Cloud reads `shiny-app/manifest.json` for the R version and packages,
-   builds, and publishes. Paste the resulting URL into the **Live app** line
-   above.
-
-To refresh dependencies later, re-run `rsconnect::writeManifest()` in this
-folder and push the updated `manifest.json`.
+## Deploy a live link
+Run `deploy.R` (it wraps `rsconnect::deployApp()`): create a free
+shinyapps.io account, paste your token from Account > Tokens, and run the
+script. Redeploys reuse the same URL. Then paste that URL into the **Live app**
+line above.
 
 ## Provenance / data note
 Derived from **unpublished HUM Lab data**; external sharing of this derived,
