@@ -1,53 +1,57 @@
-# Phoenix Multi-Modal Amenity Access — Shiny work sample
+# Phoenix Multi-Modal Amenity Access
 
-An interactive R Shiny dashboard built from the **phxmob** research project
+An interactive R Shiny map built from the **phxmob** research project
 (Weesner & Lim, UA Zuckerman College of Public Health). It maps
-**time-denominated, multi-modal access** to six essential amenities (grocery,
-pharmacy, park, school, library, transit stop) across ~835 Maricopa County
-census block groups, and lets the viewer probe **sociodemographic disparities**
-in that access.
+**time-denominated, multi-modal access** to eleven essential amenities across
+~835 Maricopa County census block groups for walking, biking, and driving.
 
 Purpose: a job-search work sample demonstrating R + Shiny + `leaflet` +
-spatial data + reproducible dashboarding.
+spatial data.
 
-**Live app:** _(add your shinyapps.io URL after deploying — see below)_
-**Code:** this repository.
+**Live app:** <https://019f4dab-5684-7130-b404-1e7165bdbd19.share.connect.posit.cloud/>
 
 ## What it does
-- **Interactive choropleth** (`leaflet`): travel time from each block group to
-  the nearest amenity of the selected type, by **walking** or **biking**
-  network routing. Hover for per-block-group detail; grey = not reachable
-  within 60 min.
-- **Equity chart** (`ggplot2`): the distribution of a chosen sociodemographic
-  variable (median income, % White, % Hispanic, % renter, population density)
-  across travel-time bins — the disparity story.
-- **Value boxes**: share of block groups reachable within 15 min, median time
-  to nearest, and n mapped.
+
+Full-window `leaflet` choropleth with a collapsible About banner and two
+floating control panels. Three map views:
+
+- **Single amenity** -- travel time from each block group to the nearest
+  amenity of the selected type (grocery, park, pharmacy, school, library,
+  childcare, bank, restaurant, fitness center, place of worship, transit stop)
+  by walking or biking. Toggleable point layer overlays every destination
+  (marker-clustered).
+- **Cumulative opportunity** -- within a travel-time budget (15--60 min), how
+  many amenity types or total destinations each block group can reach.
+- **Car dependence** -- where active-mode access fails but driving reaches.
+  Single amenity: best active-mode time, color-graded from green (reachable on
+  foot/bike) through dark maroon (car only). Cumulative: the gap between car
+  and active-mode opportunity counts.
+
+Basemap toggle (Light / Satellite), layer checkboxes, and opacity slider on
+the right panel.
 
 ## Files
-- `app.R` — the Shiny app. Self-contained; reads only `phxmob_data.rds`.
-- `phxmob_data.rds` — baked bundle (block-group polygons + access measures +
-  ACS sociodemographics). ~0.1 MB; **no Census API key or `D:\` data needed at
-  runtime.**
-- `prep_data.R` — one-time build script that regenerates the bundle from the
-  canonical frame (`D:/research/phxmob/data/access.gpkg`) + `tigris`
-  boundaries. Only needed to refresh the data.
+
+- `app.R` -- the Shiny app. Self-contained; reads only `phxmob_data.rds`.
+- `phxmob_data.rds` -- baked data bundle (block-group polygons + ACS
+  sociodemographics + single-amenity time-to-nearest + cumulative-opportunity
+  measures + amenity point locations). No Census API key or external data
+  needed at runtime.
+- `prep_data.R` -- one-time build script that regenerates the bundle from the
+  canonical data on `D:\`. Only needed to refresh the data.
 
 ## Run locally
+
 ```r
-# from this folder
 shiny::runApp()
 ```
+
 Requires: `shiny`, `bslib`, `leaflet`, `dplyr`, `sf`, `ggplot2`, `scales`.
 
-## Deploy a live link
-Run `deploy.R` (it wraps `rsconnect::deployApp()`): create a free
-shinyapps.io account, paste your token from Account > Tokens, and run the
-script. Redeploys reuse the same URL. Then paste that URL into the **Live app**
-line above.
+## Provenance
 
-## Provenance / data note
-Derived from **unpublished HUM Lab data**; external sharing of this derived,
-aggregated subset was signed off by **Chris Lim (2026-07-08)**. Figures are a
-work sample, not a published result. Underlying method: `r5r` network routing;
-2020 Census geography, ACS 2019–2023 sociodemographics.
+Derived from unpublished HUM Lab data; external sharing of this derived,
+aggregated subset signed off by Chris Lim. Figures are a work sample, not a
+published result. Method: `r5r` network routing on OpenStreetMap; 2020 Census
+geography; ACS 2019--2023 sociodemographics; Advan Monthly Patterns (Dewey
+Data) for amenity locations.
