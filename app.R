@@ -27,6 +27,7 @@ library(dplyr)
 library(sf)
 library(ggplot2)
 library(scales)
+library(tidygeocoder)
 
 d    <- readRDS("phxmob_data.rds")
 bg   <- d$bg
@@ -217,7 +218,23 @@ ui <- page_fillable(
                        padding: .3rem .7rem; border-radius: .35rem;
                        font-size: .82rem; font-weight: 600;
                        box-shadow: 0 1px 4px rgba(0,0,0,0.12);
-                       pointer-events: none; }"))),
+                       pointer-events: none; }
+     /* Address search */
+     .addr-wrap { position: relative; }
+     .addr-row { display: flex; gap: 4px; align-items: start; }
+     .addr-row .form-group { flex: 1; margin-bottom: 0; }
+     .addr-row input[type='text'] { font-size: .78rem; padding: .25rem .4rem; height: auto; }
+     .addr-row .btn { flex: 0 0 auto; font-size: .72rem; padding: .25rem .5rem;
+                      line-height: 1.4; }
+     .addr-suggestions { position: absolute; top: 100%; left: 0; right: 0;
+                         background: #fff; border: 1px solid #ddd; border-top: 0;
+                         border-radius: 0 0 4px 4px; max-height: 180px;
+                         overflow-y: auto; z-index: 1100;
+                         box-shadow: 0 2px 6px rgba(0,0,0,.15); display: none; }
+     .addr-item { padding: .35rem .5rem; font-size: .75rem; cursor: pointer;
+                  border-bottom: 1px solid #f0f0f0; line-height: 1.35; }
+     .addr-item:last-child { border-bottom: 0; }
+     .addr-item:hover { background: #e8f0fe; }"))),
   tags$head(tags$script(HTML(
     "$(document).on('shown.bs.collapse hidden.bs.collapse', function() {
        window.dispatchEvent(new Event('resize'));
@@ -230,7 +247,43 @@ ui <- page_fillable(
      });
      $(document).on('shiny:connected', function() {
        Shiny.setInputValue('basemap', 'light');
-     });"))),
+     });
+     $(document).on('keydown', '#addr', function(e) {
+       if (e.key === 'Enter') {
+         e.preventDefault(); $('#addr_go').click(); $('#addr-suggestions').hide();
+       }
+     });
+     (function() {
+       var timer = null;
+       $(document).on('input', '#addr', function() {
+         clearTimeout(timer);
+         var q = $(this).val().trim(), $s = $('#addr-suggestions');
+         if (q.length < 3) { $s.hide().empty(); return; }
+         timer = setTimeout(function() {
+           var url = 'https://nominatim.openstreetmap.org/search?format=json&limit=5' +
+             '&countrycodes=us&viewbox=-112.8,33.0,-111.2,33.9&bounded=0&q=' +
+             encodeURIComponent(q);
+           fetch(url).then(function(r) { return r.json(); }).then(function(data) {
+             $s.empty();
+             if (!data.length) { $s.hide(); return; }
+             data.forEach(function(d) {
+               $('<div class=\"addr-item\"></div>').text(d.display_name)
+                 .on('click', function() {
+                   $('#addr').val(d.display_name);
+                   $s.hide().empty();
+                   Shiny.setInputValue('addr_geo',
+                     {lat: parseFloat(d.lat), lng: parseFloat(d.lon)},
+                     {priority: 'event'});
+                 }).appendTo($s);
+             });
+             $s.show();
+           });
+         }, 500);
+       });
+       $(document).on('click', function(e) {
+         if (!$(e.target).closest('.addr-wrap').length) $('#addr-suggestions').hide();
+       });
+     })();"))),
 
   # ---- banner ----
   div(class = "app-banner",
@@ -293,6 +346,15 @@ ui <- page_fillable(
       conditionalPanel(
         "input.cat == 'n_types' || input.cat == 'n_dest'",
         selectInput("budget", "Travel-time budget", choices = budgets, selected = "30")
+      ),
+      tags$hr(class = "ctrl-sep"),
+      span(class = "ctrl-head", "Find address"),
+      div(class = "addr-wrap",
+        div(class = "addr-row",
+          textInput("addr", NULL, placeholder = "Street address"),
+          actionButton("addr_go", "Go", class = "btn-sm btn-primary")
+        ),
+        div(id = "addr-suggestions", class = "addr-suggestions")
       )
     ),
 
@@ -537,6 +599,29 @@ server <- function(input, output, session) {
           iconCreateFunction = icf)
       )
     }
+  })
+
+  observeEvent(input$addr_go, {
+    req(nzchar(trimws(input$addr)))
+    result <- tidygeocoder::geo(trimws(input$addr), method = "osm", quiet = TRUE)
+    if (is.na(result$lat) || is.na(result$long)) {
+      showNotification("Address not found.", type = "warning")
+      return()
+    }
+    leafletProxy("map") |>
+      clearGroup("addr_pin") |>
+      addMarkers(lng = result$long, lat = result$lat, group = "addr_pin",
+                 popup = htmltools::htmlEscape(trimws(input$addr))) |>
+      setView(lng = result$long, lat = result$lat, zoom = 13)
+  })
+
+  observeEvent(input$addr_geo, {
+    geo <- input$addr_geo
+    leafletProxy("map") |>
+      clearGroup("addr_pin") |>
+      addMarkers(lng = geo$lng, lat = geo$lat, group = "addr_pin",
+                 popup = htmltools::htmlEscape(trimws(input$addr))) |>
+      setView(lng = geo$lng, lat = geo$lat, zoom = 13)
   })
 }
 

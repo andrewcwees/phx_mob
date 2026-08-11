@@ -20,7 +20,7 @@ suppressWarnings(suppressMessages({
 }))
 options(tigris_use_cache = TRUE)
 
-app_dir <- "C:/Users/andre/Desktop/box/projects/life/job-search/portfolio-shiny-phxmob"
+app_dir <- "C:/Users/andre/Desktop/box/projects/work/phxmob/portfolio-shiny"
 
 cats <- c("grocery", "park", "pharmacy", "schools", "library",
           "childcare", "bank", "restaurant", "fitness", "worship", "transit")
