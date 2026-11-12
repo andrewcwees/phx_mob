@@ -1,7 +1,7 @@
 # Phoenix Multi-Modal Amenity Access
 
 An interactive R Shiny map built from the **phxmob** research project
-(Weesner & Lim, UA Zuckerman College of Public Health). It maps
+(Weesner & Lim, HUM.Lab, University of Arizona). It maps
 **time-denominated, multi-modal access** to eleven essential amenities across
 ~835 Maricopa County census block groups for walking, biking, and driving.
 
@@ -38,7 +38,7 @@ the right panel.
   measures + amenity point locations). No Census API key or external data
   needed at runtime.
 - `prep_data.R` -- one-time build script that regenerates the bundle from the
-  canonical data on `D:\`. Only needed to refresh the data.
+  project's analytic frame. Set `PHXMOB_DATA` to the data root before running.
 
 ## Run locally
 
@@ -50,8 +50,8 @@ Requires: `shiny`, `bslib`, `leaflet`, `dplyr`, `sf`, `ggplot2`, `scales`.
 
 ## Provenance
 
-Derived from unpublished HUM Lab data; external sharing of this derived,
-aggregated subset signed off by Chris Lim. Figures are a work sample, not a
+Derived from unpublished HUM.Lab data; this subset is shared with the PI's
+permission. Figures are a work sample, not a
 published result. Method: `r5r` network routing on OpenStreetMap; 2020 Census
 geography; ACS 2019--2023 sociodemographics; Advan Monthly Patterns (Dewey
 Data) for amenity locations.

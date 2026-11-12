@@ -2,7 +2,7 @@
 # Phoenix Multi-Modal Amenity Access -- interactive map
 #
 # A work-sample Shiny app built from the phxmob research project (Weesner &
-# Lim, UA Zuckerman College of Public Health). It maps time-denominated access
+# Lim, HUM.Lab, University of Arizona). It maps time-denominated access
 # to eleven essential amenities across Maricopa County block groups and lets the
 # user explore the access gradient by mode, amenity type, and travel-time
 # budget.
@@ -17,8 +17,7 @@
 # Self-contained: reads only phxmob_data.rds (baked by prep_data.R). No Census
 # API key, no external data. Run with:  shiny::runApp()
 #
-# Derived from unpublished HUM Lab data; external sharing signed off by
-# Chris Lim (2026-07-08).
+# Derived from unpublished HUM.Lab data; shared with the PI's permission.
 
 library(shiny)
 library(bslib)

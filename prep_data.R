@@ -1,9 +1,9 @@
 # prep_data.R ---------------------------------------------------------------
 # One-time build: bake a slim, self-contained dataset for the Shiny app.
-# Reads the canonical analytic frame (D:/research/phxmob/data/access.gpkg),
-# the amenity point locations (D:/research/phxmob/data/destinations.gpkg), and
-# block-group boundaries (tigris, no API key), and writes phxmob_data.rds next
-# to app.R. After this runs, the app needs no Census key and no D:\ access.
+# Reads the analytic frame (data/access.gpkg) and amenity point locations
+# (data/destinations.gpkg) from the data root, plus block-group boundaries
+# (tigris, no API key), and writes phxmob_data.rds next to this script. The app
+# itself needs no external data or API key.
 #
 # Bundle contents (list):
 #   bg   - block-group polygons + ACS sociodemographics (one row per GEOID)
@@ -12,21 +12,28 @@
 #          (GEOID x mode x cut -> n_types reachable, n_dest total destinations)
 #   dest - amenity point locations (cat, name, lng, lat) for the map overlay
 #
-# Source data are unpublished HUM Lab work; externalizing this derived subset
-# was signed off by Chris Lim (2026-07-08).
+# Source data are unpublished HUM.Lab work; this derived subset is shared with
+# the PI's permission.
 
 suppressWarnings(suppressMessages({
   library(sf); library(dplyr); library(tidyr); library(tigris)
 }))
 options(tigris_use_cache = TRUE)
 
-app_dir <- "C:/Users/andre/Desktop/box/projects/work/phxmob/portfolio-shiny"
+# -- paths --
+# Data root: set PHXMOB_DATA to override the platform default.
+data_root <- Sys.getenv("PHXMOB_DATA",
+  if (.Platform$OS.type == "windows") "D:/research/phxmob" else "/Volumes/EHD/research/phxmob")
+
+# App folder: this script's own directory (falls back to the working directory)
+script_file <- sub("^--file=", "", grep("^--file=", commandArgs(FALSE), value = TRUE))
+app_dir <- if (length(script_file)) dirname(normalizePath(script_file)) else getwd()
 
 cats <- c("grocery", "park", "pharmacy", "schools", "library",
           "childcare", "bank", "restaurant", "fitness", "worship", "transit")
 
 # 1. access measures (drop point geometry) -----------------------------------
-acc_raw <- st_read("D:/research/phxmob/data/access.gpkg", quiet = TRUE) |>
+acc_raw <- st_read(file.path(data_root, "data/access.gpkg"), quiet = TRUE) |>
   st_drop_geometry() |>
   filter(mode %in% c("walk", "bike", "car")) |>
   mutate(cut = suppressWarnings(as.integer(as.character(cut))))
@@ -67,7 +74,7 @@ demo <- acc_raw |>
            pct_own, pct_rent, density, population)
 
 # 2. amenity point locations (for the toggle overlay) ------------------------
-dest_sf <- st_read("D:/research/phxmob/data/destinations.gpkg", quiet = TRUE) |>
+dest_sf <- st_read(file.path(data_root, "data/destinations.gpkg"), quiet = TRUE) |>
   rename(cat = category) |>
   filter(cat %in% cats) |>
   st_transform(4326)
