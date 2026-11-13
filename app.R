@@ -102,14 +102,26 @@ ext_link <- function(href, label) {
   sprintf("<a href='%s' target='_blank' rel='noopener'>%s</a>", href, label)
 }
 
+# Basemap tiles are Esri's keyless services. CARTO's basemaps now require an
+# API key and serve an "API key required" placeholder tile without one.
+esri_url <- "https://server.arcgisonline.com/ArcGIS/rest/services/%s/MapServer/tile/{z}/{y}/{x}"
+esri_attr <- "Tiles &copy; Esri &mdash; Esri, HERE, Garmin, &copy; OpenStreetMap contributors, and the GIS user community"
+# The gray canvas is cached to z16; past that leaflet upscales its tiles.
+gray_opts <- tileOptions(maxNativeZoom = 16, maxZoom = 19)
+
 basemaps <- c("Light" = "light", "Satellite" = "sat")
 tiles_for <- function(map, which) {
   if (identical(which, "sat"))
     map |>
       addProviderTiles(providers$Esri.WorldImagery, group = "basemap") |>
-      addProviderTiles(providers$CartoDB.PositronOnlyLabels, group = "basemap")
+      addTiles(sprintf(esri_url, "Reference/World_Boundaries_and_Places"),
+               attribution = esri_attr, group = "basemap")
   else
-    map |> addProviderTiles(providers$CartoDB.Positron, group = "basemap")
+    map |>
+      addTiles(sprintf(esri_url, "Canvas/World_Light_Gray_Base"),
+               attribution = esri_attr, options = gray_opts, group = "basemap") |>
+      addTiles(sprintf(esri_url, "Canvas/World_Light_Gray_Reference"),
+               attribution = esri_attr, options = gray_opts, group = "basemap")
 }
 
 basemap_control <- function(sel) {
