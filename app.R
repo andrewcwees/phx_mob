@@ -77,6 +77,12 @@ demos <- list(
   density  = list(label = "Population density (/km2)", fmt = label_comma(accuracy = 1))
 )
 
+# Low-density block groups (mountain preserves, desert edge) are large and
+# nearly empty, so they dominate the map by area while holding ~3% of the
+# population. They are drawn faded, not dropped, so the metro reads first.
+low_dens_cut  <- 500   # residents per km2
+low_dens_fade <- 0.3   # multiplier on fill opacity
+
 pal_bins  <- c(15, 20, 30, 40, 50, 60)
 time_pal  <- colorBin("YlOrRd", domain = pal_bins, bins = c(15, 20, 30, 40, 50, 60, 61),
                       na.color = "#cccccc")
@@ -337,7 +343,12 @@ ui <- page_fillable(
             "<b>Sociodemographics.</b> ",
             ext_link("https://www.census.gov/programs-surveys/acs",
                      "American Community Survey"),
-            " 2019&ndash;2023, US Census Bureau."))))),
+            " 2019&ndash;2023, US Census Bureau."))),
+          tags$li(HTML(sprintf(paste0(
+            "<b>Low-density areas.</b> Block groups under %s residents/km&sup2;",
+            " (mountain preserves, desert edge) are drawn faded: they cover",
+            " about a fifth of the map but hold about 3%% of residents."),
+            low_dens_cut))))),
       div(class = "app-brand-source",
           HTML("HUM.Lab, University of Arizona.<br/>Work sample, not a published result.")))
   ),
@@ -528,17 +539,22 @@ server <- function(input, output, session) {
                         ifelse(is.na(s$v), "not within 60 min", paste0(s$v, " min")))
     }
 
+    low  <- !is.na(s$density) & s$density < low_dens_cut
+    fop  <- input$fillop * ifelse(low, low_dens_fade, 1)
+
     labs <- sprintf(
-      "<b>Block group</b> %s<br/>%s<br/>%s: <b>%s</b>",
+      "<b>Block group</b> %s<br/>%s<br/>%s: <b>%s</b><br/>%s: <b>%s</b>%s",
       s$GEOID, detail,
-      demos[["inc"]]$label, demos[["inc"]]$fmt(s[["inc"]])
+      demos[["inc"]]$label, demos[["inc"]]$fmt(s[["inc"]]),
+      demos[["density"]]$label, demos[["density"]]$fmt(s[["density"]]),
+      ifelse(low, " (low density)", "")
     ) |> lapply(htmltools::HTML)
 
     p <- p |>
       addPolygons(
         data = s,
         fillColor = ~sp$pal(v),
-        fillOpacity = input$fillop, weight = bw, color = "white",
+        fillOpacity = fop, weight = bw, color = "white",
         highlightOptions = highlightOptions(weight = 2, color = hcol,
                                              bringToFront = TRUE),
         label = labs,
