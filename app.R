@@ -359,11 +359,11 @@ ui <- page_fillable(
     leafletOutput("map", width = "100%", height = "100%"),
 
     div(class = "map-selectors",
-      selectInput("cat", "Destination", choices = amenities, selected = "grocery"),
+      selectInput("cat", "Destination", choices = amenities, selected = "n_types"),
       selectInput("mode", "Map view", choices = modes, selected = "walk"),
       conditionalPanel(
         "input.cat == 'n_types' || input.cat == 'n_dest'",
-        selectInput("budget", "Travel-time budget", choices = budgets, selected = "30")
+        selectInput("budget", "Travel-time budget", choices = budgets, selected = "15")
       ),
       tags$hr(class = "ctrl-sep"),
       span(class = "ctrl-head", "Find address"),
